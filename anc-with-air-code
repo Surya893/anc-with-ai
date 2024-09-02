@@ -1,0 +1,63 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define the OpenAirNoiseCancellation class
+class OpenAirNoiseCancellation:
+    def __init__(self, sampling_rate=44100, filter_length=1024):
+        self.sampling_rate = sampling_rate
+        self.filter_length = filter_length
+        self.reference_noise = np.zeros(self.filter_length)
+        self.coefficients = np.zeros(self.filter_length)
+        self.mu = 0.01  # Adaptation rate
+
+    def update_reference_noise(self, ambient_noise):
+        # Update reference noise with ambient noise
+        self.reference_noise = ambient_noise[:self.filter_length]
+
+    def cancel_noise(self, input_signal):
+        # Apply adaptive filtering
+        output_signal = np.convolve(input_signal, self.coefficients, mode='same')
+
+        # Ensure that 'error' has the correct size
+        output_signal = output_signal[:len(self.reference_noise)]  # Adjust the size of the output signal
+        error = self.reference_noise - output_signal
+        self.coefficients += self.mu * np.convolve(input_signal, error, mode='full')[:self.filter_length]
+
+        return output_signal
+
+# Example data (replace with your actual data)
+time = np.linspace(0, 1, 1000)
+clean_signal = np.sin(2 * np.pi * 5 * time)  # Example original clean signal (sine wave)
+ambient_noise = 0.5 * np.random.randn(1000)  # Example ambient noise
+
+# Initialize the noise cancellation algorithm
+noise_canceller = OpenAirNoiseCancellation()
+
+# Update the reference noise with the ambient noise
+noise_canceller.update_reference_noise(ambient_noise)
+
+# Cancel noise from the clean signal
+noise_cancelled_signal = noise_canceller.cancel_noise(clean_signal)
+
+# Plot the original clean signal, ambient noise, and noise-cancelled signal
+plt.figure(figsize=(10, 8))
+
+plt.subplot(4, 1, 1)
+plt.plot(time, clean_signal, label='Original Clean Signal')
+plt.legend()
+
+plt.subplot(4, 1, 2)
+plt.plot(time, ambient_noise, label='Ambient Noise')
+plt.legend()
+
+plt.subplot(4, 1, 3)
+plt.plot(time, clean_signal, label='Original Clean Signal')  # Plot original clean signal
+plt.plot(time, noise_cancelled_signal, label='Noise-Cancelled Signal', linestyle='--')  # Plot noise-cancelled signal
+plt.legend()
+
+plt.subplot(4, 1, 4)
+plt.plot(time, clean_signal, label='Original Clean Signal')  # Plot original clean signal
+plt.plot(time, clean_signal - noise_cancelled_signal, label='Difference Signal', color='red')  # Plot the difference between clean signal and noise-cancelled signal
+plt.legend()
+
+plt.show()
