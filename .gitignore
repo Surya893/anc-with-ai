@@ -35,6 +35,10 @@ wheels/
 *.jpeg
 *.gif
 
+# Audio recordings
+recordings/
+*.wav
+
 # IDE
 .vscode/
 .idea/
