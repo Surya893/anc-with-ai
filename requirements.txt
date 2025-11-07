@@ -1,2 +1,4 @@
 numpy>=1.21.0
 matplotlib>=3.4.0
+pyaudio>=0.2.11
+wave
