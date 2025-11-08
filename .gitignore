@@ -41,6 +41,7 @@ recordings/
 
 # ML model files
 *.pth
+*.pkl
 *.npz
 *.json
 training_history.png
