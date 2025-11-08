@@ -39,6 +39,14 @@ wheels/
 recordings/
 *.wav
 
+# ML model files
+*.pth
+*.npz
+*.json
+training_history.png
+training_metrics.npz
+predictions.json
+
 # IDE
 .vscode/
 .idea/
