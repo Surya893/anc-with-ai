@@ -35,6 +35,19 @@ wheels/
 *.jpeg
 *.gif
 
+# Audio recordings
+recordings/
+*.wav
+
+# ML model files
+*.pth
+*.pkl
+*.npz
+*.json
+training_history.png
+training_metrics.npz
+predictions.json
+
 # IDE
 .vscode/
 .idea/
