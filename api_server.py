@@ -3,7 +3,7 @@ REST API Server for ANC Platform
 Comprehensive API with authentication, rate limiting, and monitoring
 """
 
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, render_template
 from flask_cors import CORS
 from functools import wraps
 import jwt
@@ -482,14 +482,18 @@ def api_docs():
 
 @app.route('/', methods=['GET'])
 def index():
-    """API root endpoint."""
-    return jsonify({
-        'name': 'ANC Platform API',
-        'version': '1.0.0',
-        'documentation': request.host_url + 'api/v1/docs',
-        'health': request.host_url + 'health',
-        'status': 'operational'
-    }), 200
+    """Web UI homepage."""
+    # Check if client wants JSON (API access)
+    if request.headers.get('Accept') == 'application/json':
+        return jsonify({
+            'name': 'ANC Platform API',
+            'version': '1.0.0',
+            'documentation': request.host_url + 'api/v1/docs',
+            'health': request.host_url + 'health',
+            'status': 'operational'
+        }), 200
+    # Otherwise serve the web UI
+    return render_template('index.html')
 
 
 # Error handlers
