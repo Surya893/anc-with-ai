@@ -574,8 +574,14 @@ def index():
 
 @app.route('/demo')
 def demo():
-    """Premium demo page"""
+    """Standalone premium demo page"""
     return send_from_directory('.', 'demo-premium.html')
+
+
+@app.route('/live')
+def live_demo():
+    """Live demo with real backend integration"""
+    return render_template('live-demo.html')
 
 
 @app.route('/health')
