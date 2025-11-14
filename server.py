@@ -20,6 +20,7 @@ import time
 from config import get_config
 from models import db, User, AudioSession, NoiseDetection, ProcessingMetric, APIRequest
 from websocket_server import socketio, init_background_tasks
+from websocket_streaming import register_streaming_handlers
 from audio_processor import audio_processor
 from tasks import celery_app
 
@@ -58,6 +59,9 @@ def create_app(config_name=None):
     db.init_app(app)
     CORS(app, resources={r"/api/*": {"origins": app.config['CORS_ORIGINS']}})
     socketio.init_app(app)
+
+    # Register real-time streaming handlers
+    register_streaming_handlers(socketio)
 
     # Initialize Celery
     celery_app.conf.update(app.config)
@@ -574,8 +578,14 @@ def index():
 
 @app.route('/demo')
 def demo():
-    """Premium demo page"""
+    """Standalone premium demo page"""
     return send_from_directory('.', 'demo-premium.html')
+
+
+@app.route('/live')
+def live_demo():
+    """Live demo with real backend integration"""
+    return render_template('live-demo.html')
 
 
 @app.route('/health')
