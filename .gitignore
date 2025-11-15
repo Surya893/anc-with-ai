@@ -4,9 +4,6 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
-venv/
-ENV/
 build/
 develop-eggs/
 dist/
@@ -22,39 +19,137 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Database files
-*.db
-*.db-journal
-*.sqlite
-*.sqlite3
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
 
-# Generated images
-*.png
-*.jpg
-*.jpeg
-*.gif
-
-# Audio recordings
-recordings/
-*.wav
-
-# ML model files
-*.pth
-*.pkl
-*.npz
-*.json
-training_history.png
-training_metrics.npz
-predictions.json
-
-# IDE
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+.DS_Store
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+anc_system.db
+*.db-journal
+
+# Audio Files (generated/test - keep essential ones)
+recordings/*.wav
+test_*.wav
+demo_*.wav
+anti_*.wav
+cancelled_*.wav
+# Keep specific demo files commented out to include them
+# !demo-premium.html
+
+# Models (binary files - generated)
+# Keep the trained model in git for now
+# noise_classifier_sklearn.pkl
+# noise_classifier_emergency.pkl
+
+# Data files (generated)
+*.npz
+features.npz
+features_augmented.npz
+
+# Generated Images
+wav_analysis.png
+# Keep anc_results.png for documentation
+# !anc_results.png
+
+# Logs
+*.log
+logs/
+*.out
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Docker
+.dockerignore
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.tfvars
+!terraform.tfvars.example
+terraform.tfplan
+outputs.json
+
+# Cloud
+.aws/
+.azure/
+.gcp/
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Build artifacts (firmware)
+firmware/build/
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.d
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Node modules (if any)
+node_modules/
+package-lock.json
 
 # OS
-.DS_Store
 Thumbs.db
+.DS_Store
+desktop.ini
+
+# IDE specific
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Lambda deployment packages
+cloud/lambda/*/*.zip
+cloud/lambda/*/package/
+
+# CI/CD
+.github/workflows/*.log
+
+# Local development
+local/
+.local/
