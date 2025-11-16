@@ -111,18 +111,27 @@ class AudioProcessor:
             except Exception as e:
                 logger.error(f"Noise prediction error: {e}")
 
+        # Check for emergency sounds
         if self.emergency_detector and noise_type:
             try:
-                is_emergency = self.emergency_detector.is_emergency(noise_type)
+                is_emergency = self.emergency_detector.is_emergency_sound(noise_type, confidence)
+
+                # If emergency detected, log it and prepare to bypass ANC
+                if is_emergency:
+                    logger.warning(f"⚠️  EMERGENCY SOUND DETECTED: {noise_type} ({confidence*100:.1f}% confidence) - BYPASSING ANC")
+                    session.emergency_detections = getattr(session, 'emergency_detections', 0) + 1
             except Exception as e:
                 logger.error(f"Emergency detection error: {e}")
 
-        # Apply ANC if enabled
+        # Apply ANC if enabled AND not an emergency sound
         processed_audio = audio_data.copy()
         cancellation_db = 0.0
         snr_improvement = 0.0
 
-        if apply_anc and session.anc_enabled:
+        # SAFETY CRITICAL: Bypass ANC for emergency sounds
+        should_apply_anc = apply_anc and session.anc_enabled and not is_emergency
+
+        if should_apply_anc:
             try:
                 # Generate reference signal (in real scenario, from feedforward mic)
                 reference = audio_data.flatten()
@@ -181,6 +190,9 @@ class AudioProcessor:
             # ANC metrics
             'anc_metrics': {
                 'enabled': session.anc_enabled,
+                'applied': should_apply_anc,  # Actual ANC application status
+                'bypassed': is_emergency,      # Whether ANC was bypassed for safety
+                'bypass_reason': 'emergency_sound_detected' if is_emergency else None,
                 'intensity': session.anc_intensity,
                 'cancellation_db': float(cancellation_db),
                 'snr_improvement_db': float(snr_improvement),
@@ -229,6 +241,7 @@ class ProcessingSession:
 
         self.last_noise_type = None
         self.last_confidence = 0.0
+        self.emergency_detections = 0  # Count of emergency sounds detected
 
         self.started_at = datetime.utcnow()
         self.ended_at = None
@@ -287,6 +300,10 @@ class ProcessingSession:
             'last_detection': {
                 'type': self.last_noise_type,
                 'confidence': self.last_confidence
+            },
+            'emergency_safety': {
+                'emergency_detections': self.emergency_detections,
+                'anc_bypasses': self.emergency_detections  # Each emergency = 1 bypass
             }
         }
 
