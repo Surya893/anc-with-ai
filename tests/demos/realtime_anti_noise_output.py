@@ -3,6 +3,7 @@ Real-Time Anti-Noise Output with PyAudio
 Captures audio from microphone, inverts phase, and plays through speakers.
 """
 
+import sys
 import numpy as np
 import pyaudio
 import struct
