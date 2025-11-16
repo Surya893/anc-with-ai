@@ -41,6 +41,12 @@ env/
 *.sqlite3
 anc_system.db
 *.db-journal
+*.db-shm
+*.db-wal
+database/
+*.sql
+*.dump
+backups/*.sql
 
 # Audio Files (generated/test - keep essential ones)
 recordings/*.wav
@@ -70,6 +76,16 @@ wav_analysis.png
 *.log
 logs/
 *.out
+test.log
+tests/test.log
+*.log.*
+log/
+audit.log
+error.log
+access.log
+debug.log
+production.log
+development.log
 
 # Environment variables
 .env
@@ -147,9 +163,136 @@ docs/.doctrees/
 cloud/lambda/*/*.zip
 cloud/lambda/*/package/
 
+# IoT Certificates and Keys (SECURITY CRITICAL)
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+cert.pem
+private.key
+public.key
+AmazonRootCA*.pem
+certificates/
+certs/
+keys/
+*.csr
+
+# AWS Credentials (SECURITY CRITICAL)
+credentials
+config
+.aws/credentials
+.aws/config
+
+# Secrets
+secrets.json
+*.secret
+.secrets/
+*.credentials
+
 # CI/CD
 .github/workflows/*.log
 
 # Local development
 local/
 .local/
+
+# Test artifacts
+test_results/
+test-results.xml
+coverage.xml
+.coverage.*
+*.cover
+nosetests.xml
+junit.xml
+pytest_cache/
+
+# Cache directories
+.cache/
+cache/
+*.cache
+
+# Synthetic/generated data
+features_synthetic.npz
+synthetic_data/
+generated/
+
+# Temporary download files
+downloads/
+*.download
+
+# Editor and IDE backup files
+*.swp
+*.swo
+*~
+\#*\#
+.\#*
+
+# macOS specific
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows specific
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux specific
+.directory
+.Trash-*
+.nfs*
+
+# Compiled binaries
+*.exe
+*.dll
+*.dylib
+*.so.*
+
+# Core dumps
+core
+core.*
+*.core
+
+# Profiling data
+*.prof
+*.pstats
+.profiling/
+
+# Benchmark results
+benchmark_results/
+*.benchmark
+
+# Large data files
+*.hdf5
+*.h5
+*.pickle
+*.pkl.gz
+*.npy.gz
+
+# Model checkpoints
+checkpoints/
+*.ckpt
+*.pt
+*.pth
+model_*/
+saved_models/
+
+# Tensorboard logs
+runs/
+tensorboard/
+events.out.tfevents.*
