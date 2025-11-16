@@ -2,6 +2,11 @@
 Lambda function: ANC Processor
 Applies NLMS adaptive filtering and phase inversion to audio chunks
 This is the core ANC algorithm running in the cloud
+
+CRITICAL FIXES:
+- Added boto3 timeout configuration (prevents hanging)
+- Added environment variable validation (fail-fast on misconfiguration)
+- Added Redis connection error handling
 """
 
 import json
@@ -10,20 +15,50 @@ import boto3
 import os
 import numpy as np
 from datetime import datetime
-import redis
+from botocore.config import Config
 
-# AWS clients
-sqs = boto3.client('sqs')
-dynamodb = boto3.resource('dynamodb')
-cloudwatch = boto3.client('cloudwatch')
+# Boto3 timeout configuration (prevents hanging)
+boto_config = Config(
+    connect_timeout=2,
+    read_timeout=10,
+    retries={'max_attempts': 3, 'mode': 'standard'}
+)
 
-# Environment variables
-OUTPUT_QUEUE_URL = os.environ['OUTPUT_QUEUE_URL']
-REDIS_ENDPOINT = os.environ['REDIS_ENDPOINT']
-SESSIONS_TABLE = os.environ['SESSIONS_TABLE']
+# AWS clients with timeout configuration
+sqs = boto3.client('sqs', config=boto_config)
+dynamodb = boto3.resource('dynamodb', config=boto_config)
+cloudwatch = boto3.client('cloudwatch', config=boto_config)
+
+# Environment variable validation
+def get_required_env(key):
+    """Get required environment variable or raise error"""
+    value = os.environ.get(key)
+    if not value:
+        raise ValueError(f"Required environment variable {key} not set")
+    return value
+
+try:
+    OUTPUT_QUEUE_URL = get_required_env('OUTPUT_QUEUE_URL')
+    REDIS_ENDPOINT = get_required_env('REDIS_ENDPOINT')
+    SESSIONS_TABLE = get_required_env('SESSIONS_TABLE')
+except ValueError as e:
+    print(f"FATAL: {str(e)}")
+    raise
 
 # Redis client for caching filter coefficients
-redis_client = redis.Redis.from_url(f"redis://{REDIS_ENDPOINT}")
+try:
+    import redis
+    redis_client = redis.Redis.from_url(
+        f"redis://{REDIS_ENDPOINT}",
+        socket_connect_timeout=2,
+        socket_timeout=5,
+        decode_responses=False
+    )
+    REDIS_AVAILABLE = True
+except Exception as e:
+    print(f"WARNING: Redis not available: {str(e)}")
+    redis_client = None
+    REDIS_AVAILABLE = False
 
 # Constants
 SAMPLE_RATE = 48000
@@ -240,6 +275,11 @@ def lambda_handler(event, context):
 
 def load_filter(session_id, config):
     """Load NLMS filter from Redis cache or create new"""
+    if not REDIS_AVAILABLE:
+        # Redis not available, always create new filter
+        print(f"Redis unavailable, creating new filter for session {session_id}")
+        return NLMSFilter(mu=0.001)
+
     try:
         # Try to load from cache
         cache_key = f"filter:{session_id}"
@@ -268,6 +308,10 @@ def load_filter(session_id, config):
 
 def save_filter(session_id, nlms_filter):
     """Save NLMS filter to Redis cache"""
+    if not REDIS_AVAILABLE:
+        # Redis not available, skip caching
+        return
+
     try:
         cache_key = f"filter:{session_id}"
         filter_data = nlms_filter.to_dict()
