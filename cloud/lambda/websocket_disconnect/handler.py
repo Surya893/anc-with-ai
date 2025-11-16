@@ -1,22 +1,45 @@
 """
 Lambda function: WebSocket Disconnect
 Handles WebSocket connection termination and cleanup
+
+CRITICAL FIXES:
+- Added boto3 timeout configuration (prevents hanging)
+- Added environment variable validation (fail-fast on misconfiguration)
 """
 
 import json
 import boto3
 import os
 from datetime import datetime
+from botocore.config import Config
 
-# AWS clients
-dynamodb = boto3.resource('dynamodb')
-cloudwatch = boto3.client('cloudwatch')
-s3 = boto3.client('s3')
+# Boto3 timeout configuration (prevents hanging)
+boto_config = Config(
+    connect_timeout=2,
+    read_timeout=10,
+    retries={'max_attempts': 3, 'mode': 'standard'}
+)
 
-# Environment variables
-CONNECTIONS_TABLE = os.environ['CONNECTIONS_TABLE']
-SESSIONS_TABLE = os.environ['SESSIONS_TABLE']
-PROCESSED_AUDIO_BUCKET = os.environ.get('PROCESSED_AUDIO_BUCKET', '')
+# AWS clients with timeout configuration
+dynamodb = boto3.resource('dynamodb', config=boto_config)
+cloudwatch = boto3.client('cloudwatch', config=boto_config)
+s3 = boto3.client('s3', config=boto_config)
+
+# Environment variable validation
+def get_required_env(key):
+    """Get required environment variable or raise error"""
+    value = os.environ.get(key)
+    if not value:
+        raise ValueError(f"Required environment variable {key} not set")
+    return value
+
+try:
+    CONNECTIONS_TABLE = get_required_env('CONNECTIONS_TABLE')
+    SESSIONS_TABLE = get_required_env('SESSIONS_TABLE')
+    PROCESSED_AUDIO_BUCKET = os.environ.get('PROCESSED_AUDIO_BUCKET', '')
+except ValueError as e:
+    print(f"FATAL: {str(e)}")
+    raise
 
 
 def lambda_handler(event, context):

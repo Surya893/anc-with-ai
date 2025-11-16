@@ -327,11 +327,18 @@ class IoTConnection:
         return len(topic_parts) == len(pattern_parts)
 
     def _reconnect(self):
-        """Attempt to reconnect with exponential backoff."""
-        delay = self.reconnect_delay
+        """
+        Attempt to reconnect with exponential backoff.
 
-        while self.auto_reconnect and not self.connected:
-            logger.info(f"Reconnecting in {delay} seconds...")
+        CRITICAL FIX: Added max_retries to prevent infinite loop.
+        After max retries, gives up and disables auto_reconnect.
+        """
+        delay = self.reconnect_delay
+        max_retries = 10  # CRITICAL: Prevent infinite loop
+        retry_count = 0
+
+        while self.auto_reconnect and not self.connected and retry_count < max_retries:
+            logger.info(f"Reconnecting in {delay} seconds... (attempt {retry_count + 1}/{max_retries})")
             time.sleep(delay)
 
             try:
@@ -344,6 +351,11 @@ class IoTConnection:
 
             # Exponential backoff
             delay = min(delay * 2, self.max_reconnect_delay)
+            retry_count += 1
+
+        if retry_count >= max_retries:
+            logger.error(f"CRITICAL: Max reconnection attempts ({max_retries}) reached, giving up")
+            self.auto_reconnect = False  # Stop trying to prevent resource exhaustion
 
     def _flush_message_queue(self):
         """Publish queued messages after reconnection."""

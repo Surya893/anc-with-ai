@@ -1,21 +1,51 @@
 """
 Lambda function: Audio Sender
 Sends processed audio back to client via WebSocket
+
+CRITICAL FIXES:
+- Moved boto3 client initialization outside handler (cold start optimization)
+- Added boto3 timeout configuration (prevents hanging)
+- Added environment variable validation (fail-fast on misconfiguration)
 """
 
 import json
 import boto3
 import os
 from datetime import datetime
+from botocore.config import Config
 
-# AWS clients
-apigatewaymanagementapi = None  # Initialized per connection
-cloudwatch = boto3.client('cloudwatch')
-dynamodb = boto3.resource('dynamodb')
+# Boto3 timeout configuration (prevents hanging)
+boto_config = Config(
+    connect_timeout=2,
+    read_timeout=10,
+    retries={'max_attempts': 3, 'mode': 'standard'}
+)
 
-# Environment variables
-WEBSOCKET_ENDPOINT = os.environ['WEBSOCKET_ENDPOINT']
-CONNECTIONS_TABLE = os.environ['CONNECTIONS_TABLE']
+# Environment variable validation
+def get_required_env(key):
+    """Get required environment variable or raise error"""
+    value = os.environ.get(key)
+    if not value:
+        raise ValueError(f"Required environment variable {key} not set")
+    return value
+
+try:
+    WEBSOCKET_ENDPOINT = get_required_env('WEBSOCKET_ENDPOINT')
+    CONNECTIONS_TABLE = get_required_env('CONNECTIONS_TABLE')
+except ValueError as e:
+    print(f"FATAL: {str(e)}")
+    raise
+
+# AWS clients with timeout configuration (initialized ONCE at cold start)
+cloudwatch = boto3.client('cloudwatch', config=boto_config)
+dynamodb = boto3.resource('dynamodb', config=boto_config)
+
+# API Gateway Management API client (initialized ONCE, not per request)
+apigatewaymanagementapi = boto3.client(
+    'apigatewaymanagementapi',
+    endpoint_url=WEBSOCKET_ENDPOINT,
+    config=boto_config
+)
 
 
 def lambda_handler(event, context):
@@ -53,14 +83,6 @@ def lambda_handler(event, context):
             metrics = message['metrics']
 
             print(f"Sending chunk {chunk_id} to connection {connection_id}")
-
-            # Initialize API Gateway Management API client
-            global apigatewaymanagementapi
-            if apigatewaymanagementapi is None:
-                apigatewaymanagementapi = boto3.client(
-                    'apigatewaymanagementapi',
-                    endpoint_url=WEBSOCKET_ENDPOINT
-                )
 
             # Prepare response
             response_data = {
