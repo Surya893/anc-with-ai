@@ -236,6 +236,13 @@ cd ../tools/
 - **Global CDN**: Low-latency access worldwide
 - **Production Monitoring**: CloudWatch dashboards and alarms
 
+### ✅ AWS IoT Integration
+- **Device Connectivity**: Secure MQTT connection with certificate-based auth
+- **Device Shadow Sync**: Bidirectional state synchronization
+- **Telemetry Publishing**: Real-time metrics and event streaming
+- **Data Persistence**: Automatic routing to DynamoDB, S3, and Lambda
+- **Offline Support**: Message queuing and automatic reconnection
+
 ### ✅ Emergency Detection (Safety-Critical)
 - **Real-Time Detection**: Identifies emergency sounds (fire alarms, sirens) in <100ms
 - **Automatic ANC Bypass**: Disables noise cancellation for safety alerts
