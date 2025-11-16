@@ -39,6 +39,12 @@ This infrastructure processes incoming audio in real-time, applies phase-inverte
 - **API Gateway WebSocket**: Real-time bidirectional audio streaming
 - **CloudFront**: Global CDN for low-latency access
 
+### IoT & Device Management
+- **AWS IoT Core**: Device connectivity and messaging
+- **Device Shadow**: State synchronization between devices and cloud
+- **IoT Rules Engine**: Data routing and transformation
+- **IoT Analytics**: Device telemetry analytics
+
 ### Monitoring Layer
 - **CloudWatch**: Logs, metrics, dashboards
 - **X-Ray**: Distributed tracing
