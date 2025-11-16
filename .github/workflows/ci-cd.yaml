@@ -43,14 +43,21 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-cov flake8
 
+      - name: Set up Python path
+        run: |
+          echo "PYTHONPATH=$PYTHONPATH:${{ github.workspace }}:${{ github.workspace }}/src/api:${{ github.workspace }}/src/core:${{ github.workspace }}/src/ml:${{ github.workspace }}/src/database:${{ github.workspace }}/src/utils:${{ github.workspace }}/src/web:${{ github.workspace }}/config" >> $GITHUB_ENV
+
       - name: Lint with flake8
         run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          # Check for critical syntax errors
+          flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Full lint (non-blocking)
+          flake8 src tests --count --exit-zero --statistics
 
       - name: Run tests
         run: |
-          pytest --cov=. --cov-report=xml --cov-report=html
+          # Run tests with coverage on src/ directory only
+          pytest tests/ --cov=src --cov-report=xml --cov-report=html -v
 
       - name: Upload coverage
         uses: codecov/codecov-action@v3
@@ -198,7 +205,8 @@ jobs:
       - name: Run Bandit security linter
         run: |
           pip install bandit
-          bandit -r . -f json -o bandit-report.json || true
+          # Only scan source code directories
+          bandit -r src -f json -o bandit-report.json || true
 
       - name: Upload Bandit results
         uses: actions/upload-artifact@v3
