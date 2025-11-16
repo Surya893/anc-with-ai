@@ -130,3 +130,22 @@ variable "enable_auto_scaling" {
   type        = bool
   default     = true
 }
+
+# WAF Configuration
+variable "waf_rate_limit" {
+  description = "WAF rate limit per 5 minutes"
+  type        = number
+  default     = 2000
+}
+
+# S3 CORS Configuration
+variable "allowed_origins" {
+  description = "Allowed CORS origins for S3 buckets"
+  type        = list(string)
+  default     = ["https://app.anc-platform.com", "http://localhost:3000"]
+
+  validation {
+    condition     = !contains(var.allowed_origins, "*") || var.environment != "production"
+    error_message = "Wildcard CORS origin (*) not allowed in production."
+  }
+}
