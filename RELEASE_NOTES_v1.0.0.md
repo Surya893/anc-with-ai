@@ -127,9 +127,60 @@ Emergency Detection:    <100ms          ✓ Target: <200ms
 - API documentation
 - **Emergency detection system documentation**
 
+## 📦 Installation & Packages
+
+### Docker Container (Recommended for Production)
+
+Pull and run the official Docker image from GitHub Container Registry:
+
+```bash
+# Pull the latest version
+docker pull ghcr.io/surya893/anc-with-ai:latest
+
+# Or pull a specific version
+docker pull ghcr.io/surya893/anc-with-ai:1.0.0
+
+# Run the container
+docker run -d \
+  -p 5000:5000 \
+  -e DATABASE_URL=postgresql://... \
+  -e REDIS_URL=redis://... \
+  --name anc-platform \
+  ghcr.io/surya893/anc-with-ai:1.0.0
+```
+
+### Python Package
+
+Install the ANC Platform library via pip:
+
+```bash
+# Install from GitHub Packages
+pip install anc-platform==1.0.0
+
+# Or install with cloud extras
+pip install anc-platform[cloud]==1.0.0
+
+# Use the library in your code
+from anc_platform import AudioProcessor, EmergencyDetector
+```
+
+### Download Pre-built Releases
+
+Download pre-built packages from the [Releases page](https://github.com/Surya893/anc-with-ai/releases/tag/v1.0.0):
+- **Source code** (tar.gz, zip)
+- **Python wheel** (.whl)
+- **Firmware binaries** (.bin, .elf)
+
 ## 🚀 Quick Start
 
-### Option 1: Local Development (Fastest)
+### Option 1: Docker (Fastest)
+```bash
+docker pull ghcr.io/surya893/anc-with-ai:1.0.0
+docker run -d -p 5000:5000 ghcr.io/surya893/anc-with-ai:1.0.0
+# Access: http://localhost:5000/live
+```
+
+### Option 2: Local Development
 ```bash
 git clone https://github.com/Surya893/anc-with-ai.git
 cd anc-with-ai
@@ -139,7 +190,14 @@ pip install -r requirements.txt
 # Access: http://localhost:5000/live
 ```
 
-### Option 2: AWS Cloud Deployment
+### Option 3: Python Package
+```bash
+pip install anc-platform==1.0.0
+python -m anc_platform.server
+# Access: http://localhost:5000/live
+```
+
+### Option 4: AWS Cloud Deployment
 ```bash
 aws configure
 cd cloud/
@@ -147,7 +205,7 @@ cd cloud/
 curl $(terraform output -raw api_gateway_rest_url)/health
 ```
 
-### Option 3: Firmware Build
+### Option 5: Firmware Build
 ```bash
 cd firmware/ && make -j$(nproc)
 cd ../tools/
