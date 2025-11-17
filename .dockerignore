@@ -1,0 +1,117 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Development
+tests/
+test_*.py
+*_test.py
+.env.example
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Recordings and temporary files
+recordings/
+*.wav
+*.mp3
+*.flac
+temp/
+tmp/
+
+# Credentials and secrets
+*.pem
+*.key
+*.crt
+certificates/
+.env
+credentials.json
+secrets/
+
+# Build artifacts
+firmware/build/
+*.bin
+*.elf
+*.hex
+*.map
+
+# Terraform
+cloud/terraform/.terraform/
+cloud/terraform/*.tfstate
+cloud/terraform/*.tfstate.backup
+cloud/terraform/.terraform.lock.hcl
+
+# Misc
+.cache/
+*.bak
+*.orig
