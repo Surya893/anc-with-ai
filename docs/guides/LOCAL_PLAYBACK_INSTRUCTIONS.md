@@ -4,9 +4,9 @@
 
 ---
 
-## ✅ Code Verified in Claude
+## ✅ Code Verified
 
-The playback code has been **verified in Claude** (partial check):
+The playback code has been **verified** (partial check):
 
 - ✓ Anti-noise generation logic correct
 - ✓ Phase inversion: `np.allclose(anti_noise, -tone)` verified
@@ -86,7 +86,7 @@ You will hear **3 sounds** in sequence:
 
 ---
 
-## Verification Results (From Claude)
+## Verification Results
 
 **Pre-verified before local execution:**
 
@@ -253,7 +253,7 @@ tone = 0.3 * np.sin(2 * np.pi * 440 * t).astype(np.float32)
 anti_noise = -tone
 
 # 3. Verify
-assert np.allclose(anti_noise, -tone)  # ✓ PASSED in Claude
+assert np.allclose(anti_noise, -tone)  # ✓ PASSED in a sandboxed environment
 
 # 4. Create combined signal
 combined = tone + anti_noise  # = 0 (silence)
@@ -281,7 +281,7 @@ Original:   x(t) = 0.3 · sin(2π · 440 · t)
 Anti-noise: y(t) = -x(t) = 0.3 · sin(2π · 440 · t + π)
 Combined:   x(t) + y(t) = 0 (silence)
 
-Verified in Claude:
+Verified:
   RMS(combined) = 0.000000e+00 ✓
   Max(|combined|) = 0.000000e+00 ✓
 ```
@@ -290,7 +290,7 @@ Verified in Claude:
 
 ## Verification Checklist
 
-Before running locally, verified in Claude:
+Before running locally, verified:
 
 - [x] Tone generation correct (440 Hz, 2 sec, 88200 samples)
 - [x] Anti-noise = -tone (phase inversion)
@@ -310,14 +310,14 @@ Before running locally, verified in Claude:
 |------|---------|-------------|
 | `simple_anti_noise_demo.py` | Simple demo | **Start here** |
 | `realtime_anti_noise_output.py` | Full system | Advanced testing |
-| `verify_playback_code.py` | Code check | Run in Claude |
+| `verify_playback_code.py` | Code check | Run in a sandboxed environment |
 | `REALTIME_ANTI_NOISE_GUIDE.md` | Full docs | Reference |
 
 ---
 
 ## Expected Results
 
-### From Claude Verification
+### Verification
 
 **Predicted playback:**
 
@@ -358,7 +358,7 @@ Once you confirm Step 3 is silent:
    ```bash
    python verify_playback_code.py
    ```
-   All tests should pass in Claude
+   All tests should pass in a sandboxed environment
 
 2. Check installation:
    ```bash
@@ -376,7 +376,7 @@ Once you confirm Step 3 is silent:
 ## Summary
 
 **Code Status:**
-- ✅ Verified in Claude (all logic correct)
+- ✅ Verified (all logic correct)
 - ✅ Ready for local execution
 - ✅ Cancellation guaranteed (math verified)
 

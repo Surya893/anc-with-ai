@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Verify Full Integration - Test main.py components in Claude
+Verify Full Integration - Test main.py components in a sandboxed environment
 
 Tests all integration points without requiring audio hardware.
 """

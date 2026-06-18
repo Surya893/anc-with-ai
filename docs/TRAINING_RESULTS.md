@@ -1,6 +1,6 @@
 # Noise Classification Model - Training Results
 
-**Executed in Claude Environment**
+**Executed in a sandboxed environment**
 **Date**: 2025-11-08
 
 ---
@@ -312,7 +312,7 @@ The system is ready for real-world deployment once sufficient real audio data is
 
 ---
 
-*Training executed in Claude environment*
+*Training executed in a sandboxed environment*
 *Model: sklearn MLPClassifier (PyTorch-equivalent architecture)*
 *Dataset: Augmented from 9 to 120 samples*
 *Status: ✅ Production-Ready*

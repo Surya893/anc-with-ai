@@ -1,7 +1,7 @@
 """
 Training Demo using scikit-learn Neural Network
 Demonstrates the complete training pipeline and achieves >70% accuracy.
-(PyTorch alternative for Claude environment)
+(PyTorch alternative for sandboxed environment)
 """
 
 import numpy as np

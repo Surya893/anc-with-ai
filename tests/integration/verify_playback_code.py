@@ -1,5 +1,5 @@
 """
-Verify Playback Code Logic (Runs in Claude)
+Verify Playback Code Logic (Runs in a sandboxed environment)
 Tests anti-noise generation without actual audio playback.
 """
 
@@ -10,7 +10,7 @@ import sys
 def verify_anti_noise_generation():
     """Verify anti-noise generation logic without PyAudio."""
     print("="*80)
-    print("PLAYBACK CODE VERIFICATION (Claude Environment)")
+    print("PLAYBACK CODE VERIFICATION (sandboxed environment)")
     print("="*80)
     print("\nTesting anti-noise generation logic without audio playback...")
     print("="*80)
@@ -255,7 +255,7 @@ def main():
     print("\n" + "="*80)
     print("PLAYBACK CODE VERIFICATION SUITE")
     print("="*80)
-    print("\nRunning in Claude (no actual audio playback)")
+    print("\nRunning in a sandboxed environment (no actual audio playback)")
     print("Verifying code logic before local execution")
     print("="*80)
 
@@ -272,7 +272,7 @@ def main():
     print("\n" + "="*80)
     print("FINAL VERIFICATION RESULT")
     print("="*80)
-    print("\n✓ ALL CODE LOGIC VERIFIED IN CLAUDE")
+    print("\n✓ ALL CODE LOGIC VERIFIED")
     print("\nCode is ready for local execution:")
     print("  ✓ Anti-noise generation correct")
     print("  ✓ Phase inversion verified")

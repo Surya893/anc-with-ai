@@ -2,7 +2,7 @@
 
 ## 🎯 Task Completed Successfully
 
-Executed real-time audio capture script in Claude environment with full verification of WAV file and database storage.
+Executed real-time audio capture script in a sandboxed environment with full verification of WAV file and database storage.
 
 ---
 
