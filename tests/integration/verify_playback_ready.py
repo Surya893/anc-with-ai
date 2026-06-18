@@ -1,6 +1,6 @@
 """
 Verify that audio files are ready for PyAudio playback.
-This script can run in Claude environment without PyAudio.
+This script can run in a sandboxed environment without PyAudio.
 """
 
 import numpy as np

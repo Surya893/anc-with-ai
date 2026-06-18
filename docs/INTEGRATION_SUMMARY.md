@@ -215,19 +215,19 @@ Options:
 
 ## Verification Results
 
-Integration tested in Claude environment (6/7 tests passing):
+Integration tested in a sandboxed environment (6/7 tests passing):
 
 ```
 ✓ Module Imports              - All components load correctly
 ✓ ANC Core Initialization     - System initializes successfully
-✗ Audio Processing Pipeline   - (numpy version conflict in Claude)
+✗ Audio Processing Pipeline   - (numpy version conflict in a sandboxed environment)
 ✓ State Management            - Thread-safe state operations work
 ✓ Web UI Integration          - State sync bidirectional
 ✓ Command-Line Arguments      - CLI parsing correct
 ✓ Thread Safety               - Concurrent access safe
 ```
 
-Note: Audio processing test fails in Claude due to numpy version mismatch,  
+Note: Audio processing test fails in a sandboxed environment due to numpy version mismatch,  
 but works correctly in local environments with matching versions.
 
 ---

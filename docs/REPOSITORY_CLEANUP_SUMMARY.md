@@ -36,7 +36,7 @@ Your GitHub repository has been thoroughly organized and cleaned up without losi
 
 ### 4. **Git History Organized** ✅
 - All work merged to main branch
-- Feature branch preserved: `claude/setup-sqlite-noise-schema-011CUtScXcXcBeukJeg2jEQb`
+- Feature branch preserved: `feature/sqlite-noise-schema`
 - Created release tag: `v1.0.0`
 - Clean commit history with descriptive messages
 
@@ -189,7 +189,7 @@ anc-with-ai/
 
 ```
 main                                    # ✅ Production-ready code
-└── claude/setup-sqlite-noise-schema-* # ✅ Feature branch (preserved)
+└── feature/sqlite-noise-schema-* # ✅ Feature branch (preserved)
 ```
 
 ### Recent Commits (Cleaned)

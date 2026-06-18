@@ -1,6 +1,6 @@
 """
 Demo script to capture audio and verify database storage.
-Uses simulated audio for demonstration in Claude environment.
+Uses simulated audio for demonstration in a sandboxed environment.
 """
 
 import numpy as np

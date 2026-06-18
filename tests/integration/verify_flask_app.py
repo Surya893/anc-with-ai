@@ -1,5 +1,5 @@
 """
-Verify Flask App Code (Runs in Claude)
+Verify Flask App Code (Runs in a sandboxed environment)
 Tests API logic and routes without starting the server.
 """
 
@@ -11,7 +11,7 @@ from datetime import datetime
 def verify_app_structure():
     """Verify Flask app structure and imports."""
     print("="*80)
-    print("FLASK APP CODE VERIFICATION (Claude Environment)")
+    print("FLASK APP CODE VERIFICATION (sandboxed environment)")
     print("="*80)
     print("\nVerifying app structure and code logic...")
     print("="*80)
@@ -373,7 +373,7 @@ def main():
     print("\n" + "="*80)
     print("FLASK APP VERIFICATION SUITE")
     print("="*80)
-    print("\nRunning in Claude (code verification only)")
+    print("\nRunning in a sandboxed environment (code verification only)")
     print("Actual browser testing must be done locally")
     print("="*80)
 
@@ -392,7 +392,7 @@ def main():
     print("\n" + "="*80)
     print("VERIFICATION COMPLETE")
     print("="*80)
-    print("\n✓ Flask app code verified in Claude")
+    print("\n✓ Flask app code verified")
     print("✓ All endpoints tested successfully")
     print("✓ Ready for local browser testing")
     print("\n→ Next: Run 'python app.py' locally and test in browser")
