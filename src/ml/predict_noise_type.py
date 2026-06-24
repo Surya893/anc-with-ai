@@ -79,7 +79,7 @@ class NoisePredictor:
         with wave.open(filepath, 'rb') as wf:
             frames = wf.readframes(wf.getnframes())
             audio_data = np.frombuffer(frames, dtype=np.int16)
-            audio_data = audio_data.astype(np.float64) / 32768.0
+            audio_data = audio_data.astype(np.float32) / 32768.0
 
         return self.predict_from_audio(audio_data)
 
