@@ -186,8 +186,9 @@ class AudioCapture:
         audio_bytes = b''.join(self.frames)
         audio_int16 = np.frombuffer(audio_bytes, dtype=np.int16)
 
-        # Normalize to float [-1, 1]
-        audio_float = audio_int16.astype(np.float64) / 32768.0
+        # Normalize to float [-1, 1]. float32 (not float64) per the audio dtype
+        # contract — dividing a float32 array by a Python scalar stays float32.
+        audio_float = audio_int16.astype(np.float32) / 32768.0
 
         return audio_float
 
