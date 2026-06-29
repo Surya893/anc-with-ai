@@ -69,7 +69,7 @@ def generate_test_signals():
     return signals
 
 
-def test_phase_inversion(signal, signal_name, tolerance=1e-10):
+def check_phase_inversion(signal, signal_name, tolerance=1e-10):
     """
     Test phase inversion and verify output equals -input.
 
@@ -187,7 +187,7 @@ def run_comprehensive_tests():
 
     # Test each signal
     for signal_name, signal in test_signals.items():
-        passed = test_phase_inversion(signal, signal_name)
+        passed = check_phase_inversion(signal, signal_name)
         results[signal_name] = passed
 
     # Summary
