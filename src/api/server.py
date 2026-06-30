@@ -44,8 +44,28 @@ def setup_logging(app):
     app.logger.info('ANC Platform startup')
 
 
+# Environment variables that MUST be set for the app to run safely.
+# See .env.example for documentation of every supported key. Only keys with
+# no safe default belong here (optional/platform-injected keys are excluded).
+REQUIRED_ENV_KEYS = [
+    "SECRET_KEY",  # Flask session signing + JWT base; insecure dev default must be overridden in production
+]
+
+
+def _validate_required_env() -> None:
+    """Fail loudly at app-creation time if a required env var is unset."""
+    for key in REQUIRED_ENV_KEYS:
+        if not os.environ.get(key):
+            raise RuntimeError(
+                f"Missing required environment variable: {key}. "
+                "See .env.example for documentation."
+            )
+
+
 def create_app(config_name=None):
     """Application factory"""
+    _validate_required_env()
+
     app = Flask(__name__)
 
     # Load configuration
